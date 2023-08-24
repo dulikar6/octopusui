@@ -33,7 +33,7 @@ def main():
             with st.spinner("Thinking..."):
                 message_placeholder = st.empty()
                 full_response = ""
-                assistant_response = generate_pdf_chat(prompt, session_id, file_name)
+                assistant_response, source_data_list = generate_pdf_chat(prompt, session_id, file_name)
                 # Simulate stream of response with milliseconds delay
                 for chunk in assistant_response.split():
                     full_response += chunk + " "
@@ -41,6 +41,19 @@ def main():
                     # Add a blinking cursor to simulate typing
                     message_placeholder.markdown(full_response + "▌")
                 message_placeholder.markdown(full_response)
+
+                # enh_expander = st.expander("Citations", expanded=False)
+                # with enh_expander:
+                #     st.write("  insight.a❕")
+                # Combine content from all items in the list
+                combined_content = "\n\n".join(item['page_content'] for item in source_data_list)
+                # Create a single expander with the combined content
+                with st.expander("Source Citation"):
+                    st.markdown(
+                        f'<div style="overflow-y: scroll; max-height: 300px;">{combined_content}</div>',
+                        unsafe_allow_html=True
+                    )
+
         # Add assistant response to chat history
         st.session_state.messages.append({"role": "assistant", "content": full_response})
 

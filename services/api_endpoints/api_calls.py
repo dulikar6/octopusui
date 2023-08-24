@@ -19,7 +19,7 @@ def generate_conversation_chat(prompt_input, session_id):
 def generate_pdf_chat(question, session_id, file_name):
 
     print(f'{question} -- {session_id} -- {file_name}')
-    file_name = 'dulika_ranasinghe_cv.pdf'
+    file_name = 'Simplebooks Engagement letter & Fee Agreement.pdf'
 
     headers = {
         'accept': 'application/json',
@@ -34,7 +34,8 @@ def generate_pdf_chat(question, session_id, file_name):
 
     response = requests.get('https://ocotopus.azurewebsites.net/chat_pdf/', params=params, headers=headers)
     response_data = json.loads(response.text)
-    return response_data.get('result')
+    source_documents = process_source_documents(response_data.get('source_documents'))
+    return response_data.get('result'), source_documents
 
 def generate_excel_chat(question, session_id, file_name):
     headers = {
@@ -81,3 +82,13 @@ def upload_files():
 
     response = requests.post('https://ocotopus.azurewebsites.net/file_uploader/', headers=headers, files=files)
     return response.text
+
+
+def process_source_documents(data):
+    data_set = []
+    for page in data:
+        source = {}
+        source['page_content'] = page[0][1]
+        source['file_name'] = page[1][1]['source']
+        data_set.append(source)
+    return data_set
