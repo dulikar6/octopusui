@@ -19,7 +19,6 @@ def generate_conversation_chat(prompt_input, session_id):
 def generate_pdf_chat(question, session_id, file_name):
 
     print(f'{question} -- {session_id} -- {file_name}')
-    file_name = 'Simplebooks Engagement letter & Fee Agreement.pdf'
 
     headers = {
         'accept': 'application/json',
@@ -82,6 +81,14 @@ def upload_files():
 
     response = requests.post('https://ocotopus.azurewebsites.net/file_uploader/', headers=headers, files=files)
     return response.text
+
+def delete_files():
+    headers = {
+        'accept': 'application/json',
+        'X-CSRFToken': 'rbIwEMR0YzrIkFbUVoE1rH93qGMn3y4njaQyAPSEgoeswtKiTIAH9P3mTCAkprBo',
+    }
+
+    requests.get('http://127.0.0.1:8000/delete_files/', headers=headers)
 
 
 def process_source_documents(data):

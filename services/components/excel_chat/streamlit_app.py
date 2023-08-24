@@ -1,6 +1,5 @@
 import streamlit as st
-import requests
-from streamlit_app import session_id, file_name
+from streamlit_app import session_id
 from services.api_endpoints.api_calls import generate_excel_chat
 import time
 
@@ -51,7 +50,7 @@ def main():
             with st.spinner("Thinking..."):
                 message_placeholder = st.empty()
                 full_response = ""
-                assistant_response = generate_excel_chat(prompt, session_id, file_name)
+                assistant_response = generate_excel_chat(prompt, session_id, st.session_state.file_name)
                 # Simulate stream of response with milliseconds delay
                 for chunk in assistant_response.split():
                     full_response += chunk + " "

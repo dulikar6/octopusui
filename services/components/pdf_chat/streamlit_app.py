@@ -1,5 +1,5 @@
 import streamlit as st
-from streamlit_app import session_id, file_name
+from streamlit_app import session_id
 from services.api_endpoints.api_calls import generate_pdf_chat
 import time
 
@@ -33,7 +33,7 @@ def main():
             with st.spinner("Thinking..."):
                 message_placeholder = st.empty()
                 full_response = ""
-                assistant_response, source_data_list = generate_pdf_chat(prompt, session_id, file_name)
+                assistant_response, source_data_list = generate_pdf_chat(prompt, session_id, st.session_state.file_name)
                 # Simulate stream of response with milliseconds delay
                 for chunk in assistant_response.split():
                     full_response += chunk + " "

@@ -1,12 +1,11 @@
-import streamlit as st
-
 from services import components
-from services.api_endpoints.api_calls import load_file_names
+from services.api_endpoints.api_calls import load_file_names, delete_files
 from services.utils.page import page_group
 
 import json
 import streamlit as st
 from streamlit_lottie import st_lottie
+
 
 import uuid
 
@@ -14,10 +13,8 @@ session_id = str(uuid.uuid4())
 
 files = load_file_names()
 
-file_name=None
-
 def main():
-    global file_name
+
 
     page = page_group("p")
 
@@ -39,7 +36,20 @@ def main():
                   key='Car'
                   )
 
-        st.title("  insight.a❕")
+        coll1, coll2, coll3 = st.columns(3)
+        coll2.title("INSIGHT.A❕")
+
+        st.title("")
+
+        col1, col2 = st.columns(2)
+
+        if col1.button("Delete All Files"):
+            delete_files()
+            st.radio("Select a File:", [])
+
+        if col2.button("Clear Messages"):
+            st.session_state.messages.clear()
+            st.session_state.messages = [{"role": "assistant", "content": "How may I help you?"}]
 
         with st.expander("🧩 APPS", True):
             page.item("Convo CHAT", components.convo_chat, default=True)
@@ -53,11 +63,11 @@ def main():
 
             for file in files:
                 if selected_file == file:
-                    if file_name == 'ALL':
+                    if file == 'ALL':
                         file_name = None
                         st.write(f"Chatting with all the files")
                     else:
-                        file_name = file
+                        st.session_state.file_name = file
                         st.write(f"{file} is selected")
 
     page.show()
