@@ -13,7 +13,7 @@ def generate_conversation_chat(prompt_input, session_id):
         'session_id': session_id,
     }
     response = requests.get('https://ocotopus.azurewebsites.net/chat_convo/', params=params, headers=headers)
-    print(response.text)
+    print(response)
     return response.text
 
 def generate_pdf_chat(question, session_id, file_name):

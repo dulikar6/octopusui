@@ -47,16 +47,17 @@ def main():
         # message = {"role": "assistant", "content": response}
         # st.session_state.messages.append(message)
         with st.chat_message("assistant"):
-            message_placeholder = st.empty()
-            full_response = ""
-            assistant_response = generate_response(prompt, session_id)
-            # Simulate stream of response with milliseconds delay
-            for chunk in assistant_response.split():
-                full_response += chunk + " "
-                time.sleep(0.08)
-                # Add a blinking cursor to simulate typing
-                message_placeholder.markdown(full_response + "▌")
-            message_placeholder.markdown(full_response)
+            with st.spinner("Thinking..."):
+                message_placeholder = st.empty()
+                full_response = ""
+                assistant_response = generate_response(prompt, session_id)
+                # Simulate stream of response with milliseconds delay
+                for chunk in assistant_response.split():
+                    full_response += chunk + " "
+                    time.sleep(0.06)
+                    # Add a blinking cursor to simulate typing
+                    message_placeholder.markdown(full_response + "▌")
+                message_placeholder.markdown(full_response)
         # Add assistant response to chat history
         st.session_state.messages.append({"role": "assistant", "content": full_response})
 

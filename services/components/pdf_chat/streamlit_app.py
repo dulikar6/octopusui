@@ -1,7 +1,7 @@
 import streamlit as st
 from streamlit_app import session_id, file_name
 from services.api_endpoints.api_calls import generate_pdf_chat
-
+import time
 
 def main():
 
@@ -23,12 +23,26 @@ def main():
 
     # Generate a new response if last message is not from assistant
     if st.session_state.messages[-1]["role"] != "assistant":
+        # with st.chat_message("assistant"):
+        #     with st.spinner("Thinking..."):
+        #         response = generate_pdf_chat(prompt, session_id, file_name)
+        #         st.write(response)
+        # message = {"role": "assistant", "content": response}
+        # st.session_state.messages.append(message)
         with st.chat_message("assistant"):
             with st.spinner("Thinking..."):
-                response = generate_pdf_chat(prompt, session_id, file_name)
-                st.write(response)
-        message = {"role": "assistant", "content": response}
-        st.session_state.messages.append(message)
+                message_placeholder = st.empty()
+                full_response = ""
+                assistant_response = generate_pdf_chat(prompt, session_id, file_name)
+                # Simulate stream of response with milliseconds delay
+                for chunk in assistant_response.split():
+                    full_response += chunk + " "
+                    time.sleep(0.06)
+                    # Add a blinking cursor to simulate typing
+                    message_placeholder.markdown(full_response + "▌")
+                message_placeholder.markdown(full_response)
+        # Add assistant response to chat history
+        st.session_state.messages.append({"role": "assistant", "content": full_response})
 
 
 if __name__ == "__main__":

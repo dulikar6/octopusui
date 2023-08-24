@@ -2,3 +2,29 @@
 .sidebar .block-container {
     padding: 1rem; /* You can adjust the value as needed */
 }
+
+/* Apply a beautiful and bold font to Streamlit */
+body {
+    font-family: 'Your-Bold-Font-Name', sans-serif; /* Replace 'Your-Bold-Font-Name' with the actual font name */
+    font-weight: bold;
+}
+
+/* Customize the header font */
+.st-ay {
+    font-family: Poppins,Helvetica,Arial,sans-serif;
+    -webkit-tap-highlight-color: transparent;
+    color: inherit;
+    font-size: inherit;
+    line-height: 1.55;
+    -webkit-text-decoration: none;
+    text-decoration: none;
+    font-family: Poppins,Helvetica,Arial,sans-serif;
+    font-weight: 700;
+    font-size: 1.625rem;
+    line-height: 1.35;
+    margin: 0;
+}
+h1 {
+    font-size: 2em;
+    margin: 0.67em 0;
+}
