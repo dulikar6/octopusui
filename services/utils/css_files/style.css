@@ -1,0 +1,4 @@
+/* Adjust the padding of the Streamlit sidebar */
+.sidebar .block-container {
+    padding: 1rem; /* You can adjust the value as needed */
+}

@@ -13,3 +13,5 @@ streamlit-quill
 # Dependencies
 pandas-profiling
 requests
+
+streamlit_lottie
