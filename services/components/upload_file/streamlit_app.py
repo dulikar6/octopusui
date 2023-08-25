@@ -8,8 +8,19 @@ def upload_file_to_server(file, session_id=None, access_level_id=None):
         'X-CSRFToken': 'OrJ1S6ddplBQrTbrcfxIOUfRE0oSixyFGNU9ImNtrebb4xhjGlljX1irLphml5fI',
     }
 
+    if file.name.endswith('.xlsx'):
+        mime_type = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    elif file.name.endswith('.csv'):
+        mime_type = 'text/csv'
+    elif file.name.endswith('.pdf'):
+        mime_type = 'application/pdf'
+    else:
+        raise ValueError("Unsupported file type")
+
+    print(file.name, file, mime_type)
+
     files = {
-        'file': (file.name, file, 'application/pdf'),
+        'file': (file.name, file, mime_type),
         'session_id': (None, session_id),
         'access_level_id': (None, access_level_id),
     }
@@ -21,7 +32,7 @@ def upload_file_to_server(file, session_id=None, access_level_id=None):
 def main():
     st.title("File Upload Example")
 
-    uploaded_file = st.file_uploader("Upload a PDF file", type=["pdf"])
+    uploaded_file = st.file_uploader("Upload a PDF file", type=["pdf", "xlsx", "csv"])
     # session_id = st.text_input("Enter session ID")
     # access_level_id = st.text_input("Enter access level ID")
 
