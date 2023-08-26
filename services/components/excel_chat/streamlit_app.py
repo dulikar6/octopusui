@@ -1,6 +1,6 @@
 import streamlit as st
 from streamlit_app import session_id
-from services.api_endpoints.api_calls import generate_excel_chat
+from services.api_endpoints.api_calls import generate_excel_chat, load_excel_df
 import time
 
 def main():
@@ -14,43 +14,28 @@ def main():
         with st.chat_message(message["role"]):
             st.write(message["content"])
 
-
-    # Function for generating LLM response
-    # def generate_response(prompt_input, session_id):
-    #
-    #
-    #     headers = {
-    #         'accept': 'application/json',
-    #         'X-CSRFToken': 'OrJ1S6ddplBQrTbrcfxIOUfRE0oSixyFGNU9ImNtrebb4xhjGlljX1irLphml5fI',
-    #     }
-    #     params = {
-    #         'input_message': prompt_input,
-    #         'session_id': session_id,
-    #     }
-    #     response = requests.get('https://ocotopus.azurewebsites.net/chat_convo/', params=params, headers=headers)
-    #     print(response.text)
-    #     return response.text
+    if st.session_state.file_name.endswith('.xlsx') or st.session_state.file_name.endswith('.csv'):
+        df = load_excel_df(st.session_state.file_name)
+        st.dataframe(df, height=400)
+    else:
+        st.info("Please Select a CSV file or Excel file to proceed")
 
 
     # User-provided prompt
     if prompt := st.chat_input(disabled=not (True)):
         st.session_state.messages.append({"role": "user", "content": prompt})
+
         with st.chat_message("user"):
             st.write(prompt)
 
     # Generate a new response if last message is not from assistant
     if st.session_state.messages[-1]["role"] != "assistant":
-        # with st.chat_message("assistant"):
-        #     with st.spinner("Thinking..."):
-        #         response = generate_excel_chat(prompt, session_id, file_name)
-        #         st.write(response)
-        # message = {"role": "assistant", "content": response}
-        # st.session_state.messages.append(message)
+
         with st.chat_message("assistant"):
             with st.spinner("Thinking..."):
                 message_placeholder = st.empty()
                 full_response = ""
-                assistant_response = generate_excel_chat(prompt, session_id, st.session_state.file_name)
+                assistant_response, logs = generate_excel_chat(prompt, session_id, st.session_state.file_name)
                 # Simulate stream of response with milliseconds delay
                 for chunk in assistant_response.split():
                     full_response += chunk + " "
@@ -58,6 +43,12 @@ def main():
                     # Add a blinking cursor to simulate typing
                     message_placeholder.markdown(full_response + "▌")
                 message_placeholder.markdown(full_response)
+
+                with st.expander("Source Citation"):
+                    st.markdown(
+                        f'<div style="overflow-y: scroll; max-height: 300px;">{logs}</div>',
+                        unsafe_allow_html=True
+                    )
         # Add assistant response to chat history
         st.session_state.messages.append({"role": "assistant", "content": full_response})
 
