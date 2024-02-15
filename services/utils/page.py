@@ -23,7 +23,7 @@ class PageGroup:
 
     @property
     def selected(self) -> bool:
-        params = st.experimental_get_query_params()
+        params = st.query_params()
         return params[self._param][0] if self._param in params else self._default
 
     def item(self, label: str, callback: Callable, default=False) -> None:
@@ -50,7 +50,7 @@ class PageGroup:
             st.title("🤷 404 Not Found")
 
     def _on_change(self, page: str) -> None:
-        params = st.experimental_get_query_params()
+        params = st.query_params()
 
         if self._backup is None:
             if self._param in params:
