@@ -56,6 +56,8 @@ def main():
             page.item("PDF CHAT", components.pdf_chat_ui)
             page.item("Excel CHAT", components.excel_chat_ui)
             page.item("FILE UPLOAD", components.upload_file)
+            page.item("CAR EVALUATION", components.car_eval)
+
 
         with st.expander("📃 FILES", False):
             files.append("ALL")
