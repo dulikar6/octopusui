@@ -1,5 +1,5 @@
 # Core
-streamlit
+streamlit==1.31.1
 
 # Streamlit components
 streamlit-ace
